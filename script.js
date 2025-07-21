@@ -1,17 +1,14 @@
 document.getElementById("enquiryForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
+  // Add current date/time
   document.getElementById("dateTime").value = new Date().toLocaleString();
 
   const formData = new FormData(this);
-  const encodedData = new URLSearchParams(formData);
 
   fetch("https://script.google.com/macros/s/AKfycbyXoMlmkZdGSCHxzXT3AmvtWMa8HT6ZiYT8M3sWOWYejrvIT262kX48OuLCpd-A28d1/exec", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: encodedData,
+    body: formData, // DO NOT set headers manually
   })
     .then((res) => res.json())
     .then((response) => {
@@ -24,7 +21,6 @@ document.getElementById("enquiryForm").addEventListener("submit", function (e) {
       console.error("Error!", error.message);
     });
 });
-
 function checkRemarks() {
   const id = document.getElementById("checkId").value.trim();
   if (!id) {
