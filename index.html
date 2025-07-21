@@ -79,20 +79,19 @@
       form.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const formData = new FormData(form); // No custom headers = no preflight
+        const formData = new FormData(form); // ← No custom headers needed
+
         fetch(scriptURL, {
           method: "POST",
           body: formData,
         })
           .then((response) => response.text())
           .then((result) => {
-            successMsg.textContent = "Form submitted successfully!";
+            alert("Form submitted successfully!");
             form.reset();
           })
           .catch((error) => {
-            console.error("Error!", error.message);
-            successMsg.textContent = "Failed to submit form.";
-            successMsg.style.color = "red";
+            alert("Error: " + error.message);
           });
       });
     </script>
