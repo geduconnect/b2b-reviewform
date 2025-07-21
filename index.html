@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Student Enquiry Form</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <form id="enquiryForm">
     <h2>Student Enquiry Form</h2>
 
     <label>University:</label>
-    <input type="text" name="university" required>
+    <input type="text" name="university" required />
 
     <label>Course:</label>
-    <input type="text" name="course" required>
+    <input type="text" name="course" required />
 
     <label>IGC:</label>
-    <input type="text" name="igc" required>
+    <input type="text" name="igc" required />
 
     <label>Student Name:</label>
-    <input type="text" name="studentName" required>
+    <input type="text" name="studentName" required />
 
     <label>Year/Semester:</label>
-    <input type="text" name="yearSemester" required>
+    <input type="text" name="yearSemester" required />
 
     <label>Remarks:</label>
-    <textarea name="remarks" placeholder="Your comments..."></textarea>
+    <textarea name="remarks"></textarea>
 
-    <input type="hidden" name="dateTime" id="dateTime">
+    <input type="hidden" name="dateTime" id="dateTime" />
 
     <button type="submit">Submit</button>
   </form>
 
   <div id="responseArea"></div>
 
-  <hr>
+  <hr />
 
   <h3>Check Admin Response</h3>
-  <input type="text" id="checkId" placeholder="Enter your Enquiry ID">
+  <input type="text" id="checkId" placeholder="Enter your Enquiry ID" />
   <button onclick="checkRemarks()">Check</button>
   <div id="adminResponse"></div>
 
