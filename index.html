@@ -1,99 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Enquiry Form</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
-      padding: 30px;
-    }
-    form {
-      background: #fff;
-      padding: 20px;
-      max-width: 500px;
-      margin: auto;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    label {
-      display: block;
-      margin: 15px 0 5px;
-    }
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 15px;
-      background: #28a745;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #218838;
-    }
-    .success {
-      color: green;
-      margin-top: 15px;
-    }
-  </style>
-</head>
-<body>
-  <form id="enquiryForm">
-    <h2>Enquiry Form</h2>
-    <label for="igc">IGC</label>
-    <input type="text" id="igc" name="igc" required />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enquiry Form with Tracking</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      .form-container {
+        max-width: 500px;
+        margin: auto;
+        margin-top: 50px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="container">
+      <!-- Form Submission Section -->
+      <div class="form-container">
+        <h4 class="text-center mb-4">Submit Your Enquiry</h4>
+        <form id="submit-to-google-sheet">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input class="form-control" type="text" name="name" id="name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input class="form-control" type="email" name="email" id="email" required />
+          </div>
+          <div class="form-group">
+            <label for="contact_number">Contact Number:</label>
+            <input class="form-control" type="text" name="contact_number" id="contact_number" required />
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select class="form-control" name="gender" id="gender" required>
+              <option value="" disabled selected hidden>Choose...</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea class="form-control" name="message" id="message" required></textarea>
+          </div>
+          <div class="form-group form-check mt-2">
+            <input class="form-check-input" type="checkbox" id="age" />
+            <label class="form-check-label" for="age">Over 18 years old</label>
+          </div>
+          <div class="form-group form-check">
+            <input class="form-check-input" type="checkbox" id="ex" required />
+            <label class="form-check-label" for="ex">
+              Agree with terms and policies
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+      </div>
 
-    <label for="university">University</label>
-    <input type="text" id="university" name="university" required />
+      <!-- Enquiry Tracking Section -->
+      <div class="form-container mt-5">
+        <h5 class="text-center mb-3">Track Your Enquiry</h5>
+        <input id="enquiry-id" class="form-control mb-2" placeholder="Enter Enquiry ID" />
+        <button class="btn btn-info btn-block" onclick="trackEnquiry()">Check Status</button>
+        <div id="remark-result" class="mt-3 text-center"></div>
+      </div>
+    </div>
 
-    <label for="course">Course</label>
-    <input type="text" id="course" name="course" required />
+    <script>
+      // Replace with your deployed Web App URL (from Google Apps Script)
+     const scriptURL = "https://script.google.com/macros/s/AKfycbyNmaCSQhdu1fc0N6c9TSUlz758RyHKqP28MPIl8JxpptYSmqDBVg2R8ah53V6uFSO0Mg/exec";
+       const lookupURL = scriptURL;
 
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" required />
+      const form = document.forms["submit-to-google-sheet"];
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-    <label for="semester">Semester/Year</label>
-    <input type="text" id="semester" name="semester" required />
+        const formData = new FormData(form);
+        const enquiryId = "ENQ" + Date.now();
+        formData.append("enquiry_id", enquiryId);
 
-    <label for="remarks">Remarks</label>
-    <textarea id="remarks" name="remarks" rows="3"></textarea>
+        formData.append("age", document.getElementById("age").checked ? "Yes" : "No");
+        formData.append("ex", document.getElementById("ex").checked ? "Yes" : "No");
 
-    <button type="submit">Submit</button>
-    <p class="success" id="successMsg"></p>
-  </form>
-
-  <script>
-    const form = document.getElementById('enquiryForm');
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwjgIV4RpBhadahJDYVBEXt-QJdCbl3qJWIT4o4hrx3GJ5Q1pHRt7mvY6pmakan11I1/exec'; // Replace with your Web App URL
-
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const formData = new FormData(form);
-
-      fetch(scriptURL, {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => res.text())
-      .then(msg => {
-        document.getElementById('successMsg').textContent = "Form submitted successfully!";
-        form.reset();
-      })
-      .catch(err => {
-        document.getElementById('successMsg').textContent = "Fetch failed: " + err.message;
-        document.getElementById('successMsg').style.color = "red";
+        fetch(scriptURL, { method: "POST", body: formData })
+          .then(() => {
+            Swal.fire({
+              title: "Submitted!",
+              html: `Your enquiry has been submitted successfully.<br><strong>Enquiry ID: ${enquiryId}</strong>`,
+              icon: "success"
+            });
+            form.reset();
+          })
+          .catch(() => {
+            Swal.fire("Error", "Something went wrong. Please try again.", "error");
+          });
       });
-    });
-  </script>
-</body>
+
+      function trackEnquiry() {
+        const id = document.getElementById("enquiry-id").value.trim();
+        if (!id) {
+          Swal.fire("Missing", "Please enter your Enquiry ID.", "warning");
+          return;
+        }
+
+        fetch(`${lookupURL}?id=${id}`)
+          .then((res) => res.text())
+          .then((remark) => {
+            document.getElementById("remark-result").innerHTML = `<strong>Status/Remarks:</strong><br>${remark}`;
+          })
+          .catch(() => {
+            document.getElementById("remark-result").innerHTML = "Error fetching remark.";
+          });
+      }
+    </script>
+  </body>
 </html>
